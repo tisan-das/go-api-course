@@ -2,17 +2,37 @@ package main
 
 import (
 	"fmt"
-	"go-api-course/logging"
-	"go-api-course/middleware"
+	"go-api-course/src/config"
+	"go-api-course/src/logging"
+	"go-api-course/src/middleware"
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	// Initialize App configurations
+	var configReader config.ConfigReader
+	os.Setenv("config", "dev")
+	configReader = config.NewViperConfigReader()
+	err := configReader.ReadConfig()
+	if err != nil {
+		fmt.Println("Error occurred while reading configuration: ", err)
+		return
+	}
+
+	loggingLevel := configReader.GetConfigValue("loggingLevel")
+	port, err := strconv.Atoi(configReader.GetConfigValue("port"))
+	if err != nil {
+		fmt.Println("Error occurred while capturing port value: ", err)
+		return
+	}
+	fmt.Println(loggingLevel, port)
+
 	// gin.BasicAuth
 	fmt.Println("hello!")
 	router := gin.Default()
@@ -40,7 +60,7 @@ func main() {
 
 	// router.Run(":4040")
 	server := http.Server{
-		Addr:         ":4040",
+		Addr:         fmt.Sprint(":", port),
 		Handler:      router,
 		IdleTimeout:  10 * time.Second,
 		ReadTimeout:  10 * time.Second,
