@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go-api-course/src/config"
 	"go-api-course/src/controller"
+	"go-api-course/src/logging"
 	"go-api-course/src/router"
 	"io"
 	"net/http"
@@ -22,29 +23,37 @@ func main() {
 	err := configReader.ReadConfig()
 	if err != nil {
 		fmt.Println("Error occurred while reading configuration: ", err)
-		return
+		panic(err)
 	}
 
-	loggingLevel := configReader.GetConfigValue("loggingLevel")
+	loggingLevel := configReader.GetConfigValue("logLevel")
 	port, err := strconv.Atoi(configReader.GetConfigValue("port"))
 	if err != nil {
 		fmt.Println("Error occurred while capturing port value: ", err)
-		return
+		panic(err)
 	}
-	fmt.Println(loggingLevel, port)
+	logFileName := configReader.GetConfigValue("logFile")
+	fmt.Println(loggingLevel, port, logFileName)
 
-	// TODO: Initialize application logs
-
-	// Initialize routers
-	loggingFile, err := os.Create("output.log")
-	if err != nil {
-		fmt.Println("Error occurred initiating log file: ", err)
-		return
+	// Initialize App loggers
+	var logger logging.Logger
+	if loggingLevel == string(logging.LOG_INFO_LEVEL) {
+		logger, err = logging.NewZapSugarLogger(logging.LOG_INFO_LEVEL, logFileName)
+	} else if loggingLevel == string(logging.LOG_WARN_LEVEL) {
+		logger, err = logging.NewZapSugarLogger(logging.LOG_WARN_LEVEL, logFileName)
+	} else {
+		logger, err = logging.NewZapSugarLogger(logging.LOG_DEBUG_LEVEL, logFileName)
 	}
+	if logger == nil || err != nil {
+		fmt.Println("Error occurred while initializing application logger: ", err)
+		panic(err)
+	}
+
+	// Initialize Router and Controllers
 	var bookController controller.BookController
-	bookController = controller.NewInmemoryBookController()
+	bookController = controller.NewInmemoryBookController(logger)
 
-	router := router.AppRouter(loggingFile, bookController)
+	router := router.AppRouter(bookController, logger)
 	// router.Run(":4040")
 	server := http.Server{
 		Addr:         fmt.Sprint(":", port),
@@ -55,6 +64,7 @@ func main() {
 	}
 
 	// TODO: Add cron scheduler for example
+	// TODO: Add some workflow for example
 	server.ListenAndServe()
 }
 

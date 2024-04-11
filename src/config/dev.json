@@ -1,4 +1,5 @@
 {
-    "loggingLevel": "debug",
+    "logLevel": "debug",
+    "logFile": "output.log",
     "port": "4040"
 }
