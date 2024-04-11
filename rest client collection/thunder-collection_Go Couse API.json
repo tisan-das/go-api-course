@@ -1,0 +1,110 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Go Couse API",
+    "dateExported": "2024-04-11T14:58:42.188Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "d7d070cc-f1f1-4cf4-a7ea-b387d7c3cf10",
+            "colId": "7d2e7f5d-dc9d-49a9-be30-38fa1c5f1041",
+            "containerId": "",
+            "name": "Fetch Books",
+            "url": "localhost:4040/client/book",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2024-04-11T14:38:16.649Z",
+            "modified": "2024-04-11T14:39:43.712Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "d6e563f6-07eb-43a4-a2f2-80c068b57b80",
+            "colId": "7d2e7f5d-dc9d-49a9-be30-38fa1c5f1041",
+            "containerId": "",
+            "name": "Fetch Individual Book",
+            "url": "localhost:4040/client/book/7",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2024-04-11T14:38:39.491Z",
+            "modified": "2024-04-11T14:58:25.023Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "38b7e25f-7a2b-4b67-a202-9804fa552a33",
+            "colId": "7d2e7f5d-dc9d-49a9-be30-38fa1c5f1041",
+            "containerId": "",
+            "name": "Add Book",
+            "url": "localhost:4040/admin/book",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2024-04-11T14:38:57.990Z",
+            "modified": "2024-04-11T14:50:59.758Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"Id\":5,\n  \"Name\": \"Book5\",\n  \"Author\": \"Author1\",\n  \"ISBN\": \"isbn1\",\n  \"Price\": 100,\n  \"Quantity\": 100,\n  \"ReleasedDate\": \"10th Jan, 2024\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "user1",
+                    "password": "pass1"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "3ff8a72b-2a3b-47af-a63d-5c837e795a94",
+            "colId": "7d2e7f5d-dc9d-49a9-be30-38fa1c5f1041",
+            "containerId": "",
+            "name": "Delete Book",
+            "url": "localhost:4040/admin/book/1",
+            "method": "DELETE",
+            "sortNum": 40000,
+            "created": "2024-04-11T14:39:13.452Z",
+            "modified": "2024-04-11T14:41:48.947Z",
+            "headers": [],
+            "params": [],
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "user1",
+                    "password": "pass1"
+                }
+            },
+            "tests": []
+        },
+        {
+            "_id": "e05cb278-dbde-4904-a3df-e4a20a988a9d",
+            "colId": "7d2e7f5d-dc9d-49a9-be30-38fa1c5f1041",
+            "containerId": "",
+            "name": "Update Book",
+            "url": "localhost:4040/admin/book/5",
+            "method": "PATCH",
+            "sortNum": 50000,
+            "created": "2024-04-11T14:39:29.891Z",
+            "modified": "2024-04-11T14:58:05.254Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"Id\":7,\n  \"Name\": \"Book7\",\n  \"Author\": \"Author1\",\n  \"ISBN\": \"isbn1\",\n  \"Price\": 100,\n  \"Quantity\": 100,\n  \"ReleasedDate\": \"10th Jan, 2024\"\n}",
+                "form": []
+            },
+            "auth": {
+                "type": "basic",
+                "basic": {
+                    "username": "user1",
+                    "password": "pass1"
+                }
+            },
+            "tests": []
+        }
+    ]
+}
