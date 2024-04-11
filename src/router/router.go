@@ -3,16 +3,16 @@ package router
 import (
 	"go-api-course/src/controller"
 	"go-api-course/src/logging"
-	"io"
-	"os"
+	"go-api-course/src/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
-func AppRouter(logFile *os.File, bookController controller.BookController) *gin.Engine {
+func AppRouter(bookController controller.BookController, logger logging.Logger) *gin.Engine {
 	router := gin.Default()
-	gin.DefaultWriter = io.MultiWriter(logFile, os.Stdout)
-	router.Use(gin.LoggerWithFormatter(logging.FormatLogsJson))
+	// gin.DefaultWriter = io.MultiWriter(os.Stdout)
+	// router.Use(gin.LoggerWithFormatter(logging.FormatLogsJson))
+	router.Use(middleware.SetRequestId, middleware.LogRequest(logger), middleware.LogResponse(logger))
 
 	// TODO: Make the auth dynamic, also move the auth logic to middleware
 	auth := gin.BasicAuth(gin.Accounts{
@@ -28,7 +28,9 @@ func AppRouter(logFile *os.File, bookController controller.BookController) *gin.
 
 	clientGroup := router.Group("/client")
 	clientGroup.GET("/book", bookController.FetchBookItems)
-	clientGroup.GET("/book/:id", bookController.FetchBookItems)
+	clientGroup.GET("/book/:id", bookController.FetchIndividualBookItem)
+
+	// router.Use(logger.LogResponse)
 
 	return router
 }
