@@ -5,16 +5,27 @@ import (
 )
 
 type Book struct {
-	Id           int    `json:"Id" validate:"required,gt=0"`
-	Name         string `json:"Name" validate:"required"`
-	Author       string `json:"Author" validate:"required"`
-	ReleasedDate string `json:"ReleasedDate" validate:"required"`
-	ISBN         string `json:"ISBN" validate:"required"`
-	Price        int    `json:"Price" validate:"required,gte=0"`
-	Quantity     int    `json:"Quantity" validate:"required,gte=0"`
+	// TODO: How to discard and auto-populate ID?
+	Id           int    `json:"id" validate:"required,gt=0"`
+	Name         string `json:"name" validate:"required"`
+	Author       string `json:"author" validate:"required"`
+	ReleasedDate string `json:"releasedDate" validate:"required"`
+	ISBN         string `json:"isbn" validate:"required"`
+	Price        int    `json:"price" validate:"required,gte=0"`
+	Quantity     int    `json:"quantity" validate:"required,gte=0"`
 }
 
 func (book *Book) Validate() error {
 	validate := validator.New()
 	return validate.Struct(book)
+}
+
+func (book *Book) Set(id int, name, author, releasedDate, isbn string, price, quantity int) {
+	book.Id = id
+	book.Name = name
+	book.Author = author
+	book.ReleasedDate = releasedDate
+	book.ISBN = isbn
+	book.Price = price
+	book.Quantity = quantity
 }

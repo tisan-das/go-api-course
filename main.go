@@ -5,6 +5,7 @@ import (
 	"go-api-course/src/config"
 	"go-api-course/src/controller"
 	"go-api-course/src/logging"
+	"go-api-course/src/repository"
 	"go-api-course/src/router"
 	"io"
 	"net/http"
@@ -49,9 +50,29 @@ func main() {
 		panic(err)
 	}
 
+	// Initialize DB connection
+	var repositoryConnection repository.Repository
+	dbUser := configReader.GetNestedConfigValue("database", "user")
+	dbPassword := configReader.GetNestedConfigValue("database", "password")
+	dbName := configReader.GetNestedConfigValue("database", "name")
+	dbPort := configReader.GetNestedConfigValue("database", "port")
+	dbHost := configReader.GetNestedConfigValue("database", "host")
+	repositoryConnection, err = repository.NewPostgresRepo(dbHost, dbName, dbUser,
+		dbPassword, dbPort)
+	if err != nil {
+		fmt.Println("Error occurred while initiating DB connection: ", err)
+		panic(err)
+	}
+	err = repositoryConnection.AutoMigration()
+	if err != nil {
+		fmt.Println("Error occurred migrating repo: ", err)
+		panic(err)
+	}
+
 	// Initialize Router and Controllers
 	var bookController controller.BookController
-	bookController = controller.NewInmemoryBookController(logger)
+	// bookController = controller.NewInmemoryBookController(logger)
+	bookController = controller.NewBookControllerDbStorage(logger, repositoryConnection)
 
 	router := router.AppRouter(bookController, logger)
 	// router.Run(":4040")
