@@ -10,6 +10,7 @@ import (
 type ConfigReader interface {
 	ReadConfig() error
 	GetConfigValue(string) string
+	GetNestedConfigValue(string, string) string
 }
 
 type ViperConfigReader struct{}
@@ -31,4 +32,11 @@ func (configReader *ViperConfigReader) ReadConfig() error {
 func (configReader *ViperConfigReader) GetConfigValue(key string) string {
 	fmt.Println("Reading key: ", key)
 	return viper.Get(key).(string)
+}
+
+func (configReader *ViperConfigReader) GetNestedConfigValue(key1, key2 string) string {
+	fmt.Println("Reading key: (", key1, key2, ")")
+	var value map[string]interface{}
+	value = viper.Get(key1).(map[string]interface{})
+	return value[key2].(string)
 }

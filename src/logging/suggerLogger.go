@@ -55,22 +55,22 @@ func (log *ZapSugarLogger) Init(logLevel LoggingLevel, logFile string) error {
 func (log *ZapSugarLogger) Debugw(str, useCase, requestId string) {
 	_, file, line, _ := runtime.Caller(1)
 	log.logger.Debugw(str, "useCase", useCase, "requestId", requestId, "timestamp", time.Now().UTC().Format(time.RFC3339),
-		"code", fmt.Sprint("%s %s", file, line))
+		"code", fmt.Sprintf("%s %s", file, line))
 }
 func (log *ZapSugarLogger) Infow(str, useCase, requestId string) {
 	_, file, line, _ := runtime.Caller(1)
 	log.logger.Infow(str, "useCase", useCase, "requestId", requestId, "timestamp", time.Now().UTC().Format(time.RFC3339),
-		"code", fmt.Sprint("%s %s", file, line))
+		"code", fmt.Sprintf("%s %s", file, line))
 }
 func (log *ZapSugarLogger) Warnw(str, useCase, requestId string) {
 	_, file, line, _ := runtime.Caller(1)
 	log.logger.Warnw(str, "use-case", useCase, "requestId", requestId, "timestamp", time.Now().UTC().Format(time.RFC3339),
-		"code", fmt.Sprint("%s %s", file, line))
+		"code", fmt.Sprintf("%s %s", file, line))
 }
 func (log *ZapSugarLogger) Errorw(str, useCase, requestId string) {
 	_, file, line, _ := runtime.Caller(1)
 	log.logger.Errorw(str, "useCase", useCase, "requestId", requestId, "timestamp", time.Now().UTC().Format(time.RFC3339),
-		"code", fmt.Sprint("%s %s", file, line))
+		"code", fmt.Sprintf("%s %s", file, line))
 }
 
 func (log *ZapSugarLogger) LogRequest(ctx *gin.Context) {

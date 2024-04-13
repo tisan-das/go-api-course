@@ -1,5 +1,12 @@
 {
     "logLevel": "debug",
     "logFile": "output.log",
-    "port": "4040"
+    "port": "4040",
+    "database":{
+        "host": "localhost",
+        "user": "tisan",
+        "name": "book_service",
+        "password": "tisan",
+        "port": "5432"
+    }
 }
