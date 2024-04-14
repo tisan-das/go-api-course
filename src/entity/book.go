@@ -1,7 +1,6 @@
 package entity
 
 type Book struct {
-	// TODO: How to auto populate the ID and not to accept is as part of request?
 	Id           int    `gorm:"primary key;autoIncrement;not null;column:id"`
 	Name         string `gorm:"not null;index:idx_name,unique;column:name"`
 	Author       string `gorm:"not null;index:idx_name,unique;column:author"`
@@ -12,7 +11,7 @@ type Book struct {
 }
 
 func (book *Book) Set(id int, name, author, releasedDate, isbn string, price, quantity int) {
-	// book.Id = id
+	// book.Id = id // Commenting this out to ensure ID would be auto populated by database
 	book.Name = name
 	book.Author = author
 	book.ReleasedDate = releasedDate
