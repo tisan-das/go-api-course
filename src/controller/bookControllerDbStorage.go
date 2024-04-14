@@ -7,6 +7,7 @@ import (
 	"go-api-course/src/model"
 	"go-api-course/src/repository"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -36,10 +37,23 @@ func (svc *BookControllerDbStorage) AddBookItem(context *gin.Context) {
 		context.JSON(400, gin.H{"error": msg})
 		return
 	}
+	err = book.Validate()
+	if err != nil {
+		msg := fmt.Sprintf("Error occurred while validating schema for book %+v: %s", book, err)
+		svc.logger.Errorw(msg, useCase, requestId)
+		context.JSON(400, gin.H{"error": msg})
+		return
+	}
+
 	svc.logger.Debugw(fmt.Sprintf("Adding the book details %+v", book), useCase, requestId)
 	storedBookDetails, err := svc.repoConn.AddBookItem(mapper.BookModelToEntityConverter(book))
 	responseBook := mapper.BookEntityToModelConverter(storedBookDetails)
-	if err != nil {
+	if err != nil && strings.Contains(err.Error(), "duplicate key") {
+		msg := fmt.Sprintf("Error occurred while storing the book details %+v: %s", book, err)
+		svc.logger.Errorw(msg, useCase, requestId)
+		context.JSON(400, gin.H{"msg": "Book details already exists!"})
+		return
+	} else if err != nil {
 		msg := fmt.Sprintf("Error occurred while storing the book details %+v: %s", book, err)
 		svc.logger.Errorw(msg, useCase, requestId)
 		context.JSON(500, gin.H{"error": msg})
@@ -107,8 +121,15 @@ func (svc *BookControllerDbStorage) UpdateBookItem(context *gin.Context) {
 		context.JSON(400, gin.H{"error": msg})
 		return
 	}
-	if bookId != book.Id {
-		msg := fmt.Sprintf("The book id of the book details is not matching with the id in path parmas")
+	// if bookId != book.Id {
+	// 	msg := fmt.Sprintf("The book id of the book details is not matching with the id in path parmas")
+	// 	svc.logger.Errorw(msg, useCase, requestId)
+	// 	context.JSON(400, gin.H{"error": msg})
+	// 	return
+	// }
+	err = book.Validate()
+	if err != nil {
+		msg := fmt.Sprintf("Error occurred while validating schema for book %+v: %s", book, err)
 		svc.logger.Errorw(msg, useCase, requestId)
 		context.JSON(400, gin.H{"error": msg})
 		return
