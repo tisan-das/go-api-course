@@ -22,6 +22,8 @@ func NewPostgresRepo(dbHost, dbName, dbUser, dbPassword, dbPort string) (Reposit
 }
 
 // TODO: How to auto-rotate password?
+// TODO: How to omit the logs for credential issues?
+// TODO: How to use singleton design pattern for DB connection?
 func (repo *PostgresRepo) InitDBConnection(dbHost, dbName, dbUser, dbPassword,
 	dbPort string) error {
 

@@ -5,7 +5,6 @@ import (
 )
 
 type Book struct {
-	// TODO: How to discard and auto-populate ID?
 	Id           int    `json:"id"`
 	Name         string `json:"name" validate:"required"`
 	Author       string `json:"author" validate:"required"`
